@@ -1,47 +1,23 @@
 <template>
-  <div class="home">
-    <h1>All Plants</h1>
-    Search by name:
+  <div class="UserPlants">
+    <h1>Your Plants</h1>
+    <!-- Search by name:
     <input v-model="nameFilter" type="text" list="plant-names" />
     <datalist id="plant-names">
-      <option v-for="plant in plants" v-bind:key="plant.id">{{ plant.common_name }}</option>
-    </datalist>
+      <option v-for="user_plant in user_plants" v-bind:key="user_plant.id">{{ user_plant.plant.common_name }}</option>
+    </datalist> -->
 
-    <div v-for="plant in filterBy(plants, nameFilter, 'common_name')" v-bind:key="plant.id">
-      <h2>{{ plant.name }}</h2>
-      <img v-bind:src="plant.primary_image_url" v-bind:alt="plant.common_name" />
-      <p>price: {{ plant.common_name }}</p>
-      <p>description {{ plant.description }}</p>
-      <router-link v-bind:to="`/plants/${plant.id}`">More details</router-link>
+    <div v-for="user_plant in user_plants" v-bind:key="user_plant.id">
+      <h2>{{ user_plant.plant.common_name }}</h2>
+      <img v-bind:src="user_plant.primary_image_url" v-bind:alt="user_plant.user_images" />
+      <p>Owend Since: {{ user_plant.date_aquired }}</p>
+      <router-link v-bind:to="`/userplants/${user_plant.id}`">More details</router-link>
+
+      <!-- <p>Last Watered: {{ user_plant.waterings }}</p> -->
+      <!-- <p v-if="user_plant.user_images">Your Pics:</p>
+      <img v-if="user_plant.user_images" v-bind:src="user_plant.user_images" v-bind:alt="user_plant.id" /> -->
     </div>
-    <h2>Add a Plant You don't see</h2>
-    <form v-on:submit.prevent="createPlant()">
-      <ul>
-        <li v-for="error in errors" :key="error">{{ error }}</li>
-        <img v-if="status" v-bind:src="`https://http.cat/${status}`" v-on:click="status = ''" alt="" />
-      </ul>
-      Scientific Name:
-      <input type="text" v-model="newScientificName" />
-      Common Name:
-      <input type="text" v-model="newCommonName" />
-      Plant Family:
-      <input type="text" v-model="newPlantFamily" />
-      Description:
-      <input type="text" v-model="newDescription" />
-      Light Requirment:
-      <input type="text" v-model="newLight" />
-      Temperature Requirment:
-      <input type="text" v-model="newTemperature" />
-      Humidity Requirment:
-      <input type="text" v-model="newHumidity" />
-      Watering Frequency:
-      <input type="text" v-model="newWaterFreq" />
-      Soil Type:
-      <input type="text" v-model="newSoilType" />
-      Difficulty Level::
-      <input type="text" v-model="newDifficultyLevel" />
-      <input type="submit" value="Create" />
-    </form>
+    <h2>Track a New plant</h2>
   </div>
 </template>
 <style scoped>
@@ -194,49 +170,38 @@ export default {
   data: function() {
     return {
       plants: [],
+      user_plants: [],
       nameFilter: "",
-      newScientificName: "",
-      newCommonName: "",
-      newPlantFamily: "",
-      newDescription: "",
-      newLight: "",
-      newTemperature: "",
-      newHumidity: "",
-      newWaterFreq: "",
-      newSoilType: "",
-      newDifficultyLevel: "",
+      newPlantId: "",
+      newDateAquired: "",
       status: "",
       errors: [],
     };
   },
   created: function() {
+    axios.get("/api/user_plants").then(response => {
+      console.log("user_plants index", response);
+      this.user_plants = response.data;
+    });
     axios.get("/api/plants").then(response => {
       console.log("plants index", response);
       this.plants = response.data;
     });
   },
   methods: {
-    createPlant: function() {
+    createUserPlant: function() {
       var params = {
-        scientific_name: this.newScientificName,
-        common_name: this.newCommonName,
-        plant_family: this.newPlantFamily,
-        description: this.newDescription,
-        light: this.newLight,
-        temperature: this.newTemperature,
-        humidity: this.newHumidity,
-        water_freq: this.newWaterFreq,
-        soil_type: this.newSoilType,
-        difficulty_level: this.newDifficultyLevel,
+        plant_id: this.newPlantId,
+        date_aquired: this.newDateAquired,
       };
       axios
-        .post("/api/plants", params)
+        .post("/api/user_plants", params)
         .then(response => {
-          console.log("plants create", response);
-          this.$router.push("/plants");
+          console.log("user plants create", response);
+          this.$router.push("/user_plants");
         })
         .catch(error => {
-          console.log("plants create error", error.response);
+          console.log("user plants create error", error.response);
           this.errors = error.response.data.errors;
           this.status = error.response.status;
         });
