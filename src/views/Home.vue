@@ -10,8 +10,8 @@
     <section class="content-section" id="portfolio">
       <div class="container">
         <div class="content-section-heading text-center">
-          <h3 class="text-secondary mb-0">Portfolio</h3>
-          <h2 class="mb-5">Recent Projects</h2>
+          <h3 class="text-secondary mb-0"></h3>
+          <h2 class="mb-5">All Plants</h2>
         </div>
         <div class="row no-gutters">
           <div v-for="plant in filterBy(plants, nameFilter, 'common_name')" v-bind:key="plant.id" class="col-lg-6">

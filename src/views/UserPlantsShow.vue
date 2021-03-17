@@ -24,7 +24,12 @@
       <input type="date" v-model="newDate" />
       <input type="submit" value="Create" />
     </form>
-    <router-link to="/userplants/">Back to all your plants</router-link>
+    <section class="content-section  text-white">
+      <div class="container text-center">
+        <button class="btn btn-xl btn-dark" v-on:click="destroyUserPlant(userplant)">Remove This Plant</button>
+        <a href="/userplants/" class="btn btn-xl btn-light mr-4">Back to all your plants</a>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -61,6 +66,12 @@ export default {
           this.errors = error.response.data.errors;
           this.status = error.response.status;
         });
+    },
+    destroyUserPlant: function(userplant) {
+      axios.delete("/api/user_plants/" + userplant.id).then(response => {
+        console.log("user plant destroy", response);
+        this.$router.push("/userplants");
+      });
     },
   },
 };
