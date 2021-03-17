@@ -1,44 +1,52 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      |
-      <router-link to="/about">About</router-link>
-      |
-      <router-link to="/signup">Signup</router-link>
-      |
-      <router-link v-if="!isLoggedIn()" to="/login">Login</router-link>
-      |
-      <router-link v-if="isLoggedIn()" to="/logout">Logout</router-link>
-      |
-      <router-link v-if="isLoggedIn()" to="/userplants">Your Plants</router-link>
-    </div>
-    <router-view />
+    <a class="menu-toggle rounded" href="#">
+      <i class="fas fa-bars"></i>
+    </a>
+    <nav id="sidebar-wrapper">
+      <ul class="sidebar-nav">
+        <li class="sidebar-brand">
+          <a class="js-scroll-trigger" href="#page-top">Plant Track</a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/">Home</a>
+        </li>
+        <li class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/signup">Signup</a>
+        </li>
+        <li v-if="!isLoggedIn()" class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/login">Login</a>
+        </li>
+        <li v-if="isLoggedIn()" class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/logout">Logout</a>
+        </li>
+        <li v-if="isLoggedIn()" class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/userplants">Your Plants</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="container"><router-view /></div>
+    <footer class="footer text-center">
+      <div class="container">
+        <ul class="list-inline mb-5">
+          <li class="list-inline-item">
+            <a class="social-link rounded-circle text-white" href="https://github.com/benjaminbenedict">
+              <i class="icon-social-github"></i>
+            </a>
+          </li>
+        </ul>
+        <p class="text-muted small mb-0">Copyright &copy; Plant Track 2021</p>
+      </div>
+    </footer>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<style></style>
 <script>
 export default {
   data: function() {
