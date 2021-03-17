@@ -14,7 +14,7 @@
     <button v-if="plant.is_admin" v-on:click="destroyplant(plant)">Destroy plant</button> -->
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    <button v-if="isLoggedIn()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
       Add this Plant
     </button>
 
@@ -83,6 +83,9 @@ export default {
           this.errors = error.response.data.errors;
           this.status = error.response.status;
         });
+    },
+    isLoggedIn: function() {
+      return !!localStorage.getItem("jwt");
     },
 
     // destroyplant: function(plant) {
