@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <h1>All Plants</h1>
-    Search by name:
+
+    <h3>Search by name:</h3>
     <input v-model="nameFilter" type="text" list="plant-names" />
     <datalist id="plant-names">
       <option v-for="plant in plants" v-bind:key="plant.id">{{ plant.common_name }}</option>
@@ -36,59 +37,79 @@
       <p>description {{ plant.description }}</p>
       <router-link v-bind:to="`/plants/${plant.id}`">More details</router-link>
     </div> -->
-    <h2>Add a Plant You don't see</h2>
-
-    <form v-on:submit.prevent="createPlant()">
-      <div class="form-group">
-        <ul>
-          <li v-for="error in errors" :key="error">{{ error }}</li>
-          <img v-if="status" v-bind:src="`https://http.cat/${status}`" v-on:click="status = ''" alt="" />
-        </ul>
+    <section class="content-section bg-light" id="AddPlant">
+      <div class="container text-center">
+        <h2 class="mx-auto mb-5">Add a Plant You don't see</h2>
+        <p class="lead mb-5">
+          Try searching the USDA
+          <input type="text" v-model="usdaSearch" />
+          <button class="btn btn-primary btn-xl" v-on:click="searchUSDA()">Search</button>
+        </p>
+        <div v-if="loading">loading...</div>
+        <button
+          class="btn btn-outline-primary btn-sm m-1"
+          v-for="plant in usdaData"
+          v-bind:key="plant.accepted.symbol"
+          v-on:click="selectPlant(plant)"
+        >
+          {{ plant.accepted.scientific_name }}
+        </button>
       </div>
-      <div class="form-group">
-        <label for="formGroupScientificName">Scientific Name:</label>
-        <input type="text" class="form-control" v-model="newScientificName" placeholder="Scientific Name" />
+      <div class="container text-center">
+        <form v-on:submit.prevent="createPlant()">
+          <div class="form-group">
+            <ul>
+              <li v-for="error in errors" :key="error">{{ error }}</li>
+              <img v-if="status" v-bind:src="`https://http.cat/${status}`" v-on:click="status = ''" alt="" />
+            </ul>
+          </div>
+          <div class="form-group">
+            <label for="formGroupScientificName">Scientific Name:</label>
+            <input type="text" class="form-control" v-model="newScientificName" placeholder="Scientific Name" />
+          </div>
+          <div class="form-group">
+            <label for="formGroupCommonName">Common Name:</label>
+            <input type="text" class="form-control" v-model="newCommonName" />
+          </div>
+          <div class="form-group">
+            <label for="formGroupnewPlantFamily">Plant Family:</label>
+            <input type="text" class="form-control" v-model="newPlantFamily" />
+          </div>
+          <div class="form-group">
+            <label for="formDescription">Description:</label>
+            <input type="text" class="form-control" v-model="newDescription" />
+          </div>
+          <div class="form-group">
+            <label for="formGroupLight">Light Requirment:</label>
+            <multiselect v-model="newLight" :options="options"></multiselect>
+          </div>
+          <div class="form-group">
+            <label for="formGroupTemperature">Temperature Requirment:</label>
+            <multiselect v-model="newTemperature" :options="temperatures"></multiselect>
+          </div>
+          <div class="form-group">
+            <label for="formGroupHumidity">Humidity Requirment:</label>
+            <multiselect v-model="newHumidity" :options="options"></multiselect>
+          </div>
+          <div class="form-group">
+            <label for="formGroupWatering">Watering Frequency:</label>
+            <multiselect v-model="newWaterFreq" :options="options"></multiselect>
+          </div>
+          <div class="form-group">
+            <label for="formGroupSoilType">Soil Type:</label>
+            <multiselect v-model="newSoilType" :options="soils" :multiple="true"></multiselect>
+          </div>
+          <div class="form-group">
+            <label for="formGroupDifficultyLevel">Difficulty Level:</label>
+            <multiselect v-model="newDifficultyLevel" :options="diffculty"></multiselect>
+          </div>
+          <input class="btn btn-xl btn-light mr-4" type="submit" value="Create" />
+        </form>
       </div>
-      <div class="form-group">
-        <label for="formGroupCommonName">Common Name:</label>
-        <input type="text" class="form-control" v-model="newCommonName" />
-      </div>
-      <div class="form-group">
-        <label for="formGroupnewPlantFamily">Plant Family:</label>
-        <input type="text" class="form-control" v-model="newPlantFamily" />
-      </div>
-      <div class="form-group">
-        <label for="formDescription">Description:</label>
-        <input type="text" class="form-control" v-model="newDescription" />
-      </div>
-      <div class="form-group">
-        <label for="formGroupTemperature">Light Requirment:</label>
-        <input type="text" class="form-control" v-model="newLight" />
-      </div>
-      <div class="form-group">
-        <label for="formGroupTemperature">Temperature Requirment:</label>
-        <input type="text" class="form-control" v-model="newTemperature" />
-      </div>
-      <div class="form-group">
-        <label for="formGroupHumidity">Humidity Requirment:</label>
-        <input type="text" class="form-control" v-model="newHumidity" />
-      </div>
-      <div class="form-group">
-        <label for="formGroupWatering">Watering Frequency:</label>
-        <input type="text" class="form-control" v-model="newWaterFreq" />
-      </div>
-      <div class="form-group">
-        <label for="formGroupSoilType">Soil Type:</label>
-        <input type="text" class="form-control" v-model="newSoilType" />
-      </div>
-      <div class="form-group">
-        <label for="formGroupDifficultyLevel">Difficulty Level:</label>
-        <input type="text" class="form-control" v-model="newDifficultyLevel" />
-      </div>
-      <input class="btn btn-xl btn-light mr-4" type="submit" value="Create" />
-    </form>
+    </section>
   </div>
 </template>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 .img-fixed {
   width: 100%;
@@ -99,8 +120,10 @@
 <script>
 import axios from "axios";
 import Vue2Filters from "vue2-filters";
+import Multiselect from "vue-multiselect";
 
 export default {
+  components: { Multiselect },
   mixins: [Vue2Filters.mixin],
   data: function() {
     return {
@@ -115,9 +138,16 @@ export default {
       newHumidity: "",
       newWaterFreq: "",
       newSoilType: "",
+      soils: ["Aroid", "African-Violet", "Succulent", "Fast-Drainnng", "Standard Potting Mix"],
+      options: ["High", "Medium", "Low"],
+      temperatures: ["55-95", "65-85", "70-95"],
+      diffculty: ["Easy", "Medium", "Hard"],
       newDifficultyLevel: "",
+      usdaSearch: "",
+      usdaData: "",
       status: "",
       errors: [],
+      loading: false,
     };
   },
   created: function() {
@@ -126,7 +156,23 @@ export default {
       this.plants = response.data;
     });
   },
+
   methods: {
+    selectPlant(plant) {
+      console.log(plant);
+      this.newCommonName = plant.accepted.common_name;
+      this.newScientificName = plant.accepted.scientific_name;
+      this.newPlantFamily = plant.accepted.classification.subclass;
+    },
+    searchUSDA: function() {
+      this.usdaData = [];
+      this.loading = true;
+      axios.get("/api/usda?search=" + this.usdaSearch).then(response => {
+        console.log("usda index", response.data);
+        this.usdaData = response.data.message.species_list.results;
+        this.loading = false;
+      });
+    },
     createPlant: function() {
       var params = {
         scientific_name: this.newScientificName,
