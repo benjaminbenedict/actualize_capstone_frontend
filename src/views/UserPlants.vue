@@ -19,6 +19,7 @@
                 <div class="caption-content">
                   <div class="h2">{{ user_plant.plant.common_name }}</div>
                   <p class="mb-0">Owend Since: {{ user_plant.date_aquired }}</p>
+                  <p class="mb-0">Last Watered: {{ user_plant.most_recent_watering }}</p>
                 </div>
               </div>
               <img

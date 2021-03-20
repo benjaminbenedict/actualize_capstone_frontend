@@ -45,7 +45,10 @@
           <input type="text" v-model="usdaSearch" />
           <button class="btn btn-primary btn-xl" v-on:click="searchUSDA()">Search</button>
         </p>
-        <div v-if="loading">loading...</div>
+        <div v-if="loading">
+          <b-spinner variant="success" label="Text Centered"></b-spinner>
+          loading...
+        </div>
         <button
           class="btn btn-outline-primary btn-sm m-1"
           v-for="plant in usdaData"
@@ -121,9 +124,10 @@
 import axios from "axios";
 import Vue2Filters from "vue2-filters";
 import Multiselect from "vue-multiselect";
+import { BSpinner } from "bootstrap-vue";
 
 export default {
-  components: { Multiselect },
+  components: { Multiselect, BSpinner },
   mixins: [Vue2Filters.mixin],
   data: function() {
     return {

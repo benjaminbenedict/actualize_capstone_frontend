@@ -1,15 +1,19 @@
 <template>
   <div class="userplants-show">
-    <img v-bind:src="userplant.primary_image_url" v-bind:alt="userplant.id" />
-    <h2>{{ userplant.plant.common_name }}</h2>
-    <p>Scientific Name: {{ userplant.plant.scientific_name }}</p>
-    <p>Plant Family: {{ userplant.plant.plant_family }}</p>
-    <p>Light: {{ userplant.plant.light }}</p>
-    <p>Temperature Range: {{ userplant.plant.temperature }} deegrees F</p>
-    <p>Humidity Level: {{ userplant.plant.humidity }}</p>
-    <p>Watering Frequency: {{ userplant.plant.water_freq }}</p>
-    <p>Soil Type: {{ userplant.plant.soil_type }}</p>
-    <p>description: {{ userplant.plant.description }}</p>
+    <section class="content-section   text-center" id="UserPlantInfo">
+      <div class="container text-center">
+        <img v-bind:src="userplant.primary_image_url" v-bind:alt="userplant.id" />
+        <h2 class="mb-4">{{ userplant.plant.common_name }}</h2>
+        <p>Scientific Name: {{ userplant.plant.scientific_name }}</p>
+        <p>Plant Family: {{ userplant.plant.plant_family }}</p>
+        <p>Light: {{ userplant.plant.light }}</p>
+        <p>Temperature Range: {{ userplant.plant.temperature }} deegrees F</p>
+        <p>Humidity Level: {{ userplant.plant.humidity }}</p>
+        <p>Watering Frequency: {{ userplant.plant.water_freq }}</p>
+        <p>Soil Type: {{ userplant.plant.soil_type }}</p>
+        <p>Description: {{ userplant.plant.description }}</p>
+      </div>
+    </section>
     <h3>Watering Dates:</h3>
     <div v-for="watering in userplant.waterings" v-bind:key="watering.id">
       <p>{{ watering.date }}</p>
@@ -24,6 +28,26 @@
       <input type="date" v-model="newDate" />
       <input type="submit" value="Create" />
     </form>
+    <section class="content-section   text-center" id="UserPlantPhotos">
+      <h2 class="mb-4">Your Photo's of this plant</h2>
+      <div>
+        <b-carousel
+          id="carousel-1"
+          v-model="slide"
+          :interval="4000"
+          controls
+          indicators
+          background="#ababab"
+          img-width="1024"
+          img-height="480"
+          style="text-shadow: 1px 1px 2px #333;"
+          @sliding-start="onSlideStart"
+          @sliding-end="onSlideEnd"
+        >
+          <b-carousel-slide v-for="image in userImages" :key="image.id" :img-src="image.img_url"></b-carousel-slide>
+        </b-carousel>
+      </div>
+    </section>
     <section class="content-section  text-white">
       <div class="container text-center">
         <button class="btn btn-xl btn-dark" v-on:click="destroyUserPlant(userplant)">Remove This Plant</button>
@@ -35,11 +59,15 @@
 
 <script>
 import axios from "axios";
+
 export default {
   data: function() {
     return {
       userplant: { plant: {}, waterings: {} },
       newDate: Date(),
+      userImages: [],
+      slide: 0,
+      sliding: null,
       status: "",
       errors: [],
     };
@@ -48,9 +76,16 @@ export default {
     axios.get("/api/user_plants/" + this.$route.params.id).then(response => {
       console.log("plants show", response);
       this.userplant = response.data;
+      this.userImages = response.data.user_images;
     });
   },
   methods: {
+    onSlideStart(slide) {
+      this.sliding = true;
+    },
+    onSlideEnd(slide) {
+      this.sliding = false;
+    },
     createWatering: function() {
       var params = {
         date: this.newDate,
