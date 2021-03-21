@@ -41,6 +41,20 @@
 
     <section>
       <div class="container text-center">
+        <form v-on:submit.prevent="submit()">
+          <h2>Upload an image of this plant!</h2>
+
+          <div>
+            Image:
+            <input type="file" v-on:change="setFile($event)" ref="fileInput" />
+          </div>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+    </section>
+
+    <section>
+      <div class="container text-center">
         <a class="btn btn-primary btn-xl" href="/">Back to all plants</a>
       </div>
     </section>
@@ -56,6 +70,9 @@ export default {
       plant: {},
       newPlantId: "",
       newDateAquired: Date(),
+      image: "",
+      status: "",
+      errors: [],
     };
   },
   created: function() {
@@ -87,6 +104,50 @@ export default {
     isLoggedIn: function() {
       return !!localStorage.getItem("jwt");
     },
+    setFile: function(event) {
+      if (event.target.files.length > 0) {
+        this.image = event.target.files[0];
+      }
+    },
+    submit: function() {
+      // var params = {
+      //   plant_id: this.plant.id,
+      // };
+      var formData = new FormData();
+
+      formData.append("plant_id", this.plant.id);
+      formData.append("image", this.image);
+
+      axios
+        .post("/api/pictures", formData)
+        .then(response => {
+          this.$refs.fileInput.value = "";
+          console.log("picture uploaded and create", response);
+        })
+        .catch(error => {
+          console.log("pictures create error", error.response);
+          this.errors = error.response.data.errors;
+          this.status = error.response.status;
+        });
+    },
+
+    // createPlantPicture: functiaon() {
+    //   var params = {
+    //     plant_id: this.newPlantID,
+    //   };
+    //   console.log(params);
+    //   axios
+    //     .post("/api/user_plants", params)
+    //     .then(response => {
+    //       console.log("user plants create", response);
+    //       this.$router.push("/user_plants");
+    //     })
+    //     .catch(error => {
+    //       console.log("user_plants create error", error.response);
+    //       this.errors = error.response.data.errors;
+    //       this.status = error.response.status;
+    //     });
+    // },
 
     // destroyplant: function(plant) {
     //   axios.delete("/api/plants/" + plant.id).then(response => {

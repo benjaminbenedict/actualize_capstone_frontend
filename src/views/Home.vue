@@ -100,12 +100,21 @@
           </div>
           <div class="form-group">
             <label for="formGroupSoilType">Soil Type:</label>
-            <multiselect v-model="newSoilType" :options="soils" :multiple="true"></multiselect>
+            <!-- :multiple="true" find out how to turn array into concatonated string-->
+            <multiselect :multiple="true" v-model="newSoilType" :options="soils"></multiselect>
           </div>
           <div class="form-group">
             <label for="formGroupDifficultyLevel">Difficulty Level:</label>
             <multiselect v-model="newDifficultyLevel" :options="diffculty"></multiselect>
           </div>
+          <!-- <div class="form-group">
+            <label for="formGroupImage">Upload and image:</label>
+            <b-form-file
+              accept="image/jpeg, image/png, image/gif"
+              v-on:change="setFile($event)"
+              ref="fileInput"
+            ></b-form-file>
+          </div> -->
           <input class="btn btn-xl btn-light mr-4" type="submit" value="Create" />
         </form>
       </div>
@@ -147,8 +156,10 @@ export default {
       temperatures: ["55-95", "65-85", "70-95"],
       diffculty: ["Easy", "Medium", "Hard"],
       newDifficultyLevel: "",
+      // newPlantID: "",
       usdaSearch: "",
       usdaData: "",
+      // image: "",
       status: "",
       errors: [],
       loading: false,
@@ -162,6 +173,12 @@ export default {
   },
 
   methods: {
+    // setFile: function(event) {
+    //   if (event.target.files.length > 0) {
+    //     this.image = event.target.files[0];
+    //   }
+    // },
+
     selectPlant(plant) {
       console.log(plant);
       this.newCommonName = plant.accepted.common_name;
@@ -187,14 +204,20 @@ export default {
         temperature: this.newTemperature,
         humidity: this.newHumidity,
         water_freq: this.newWaterFreq,
-        soil_type: this.newSoilType,
+        soil_type: this.newSoilType.join(", "),
         difficulty_level: this.newDifficultyLevel,
       };
+      var formData = new FormData();
+
+      formData.append("image", this.image);
+
       axios
-        .post("/api/plants", params)
+        .post("/api/plants", params, formData)
         .then(response => {
+          // this.$refs.fileInput.value = "";
           console.log("plants create", response);
-          this.$router.push("/plants");
+
+          // this.$router.push("/plants");
         })
         .catch(error => {
           console.log("plants create error", error.response);
