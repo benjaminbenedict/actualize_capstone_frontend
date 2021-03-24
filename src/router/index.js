@@ -7,6 +7,7 @@ import Logout from "../views/Logout.vue";
 import UserPlants from "../views/UserPlants.vue";
 import PlantsShow from "../views/PlantsShow.vue";
 import UserPlantsShow from "../views/UserPlantsShow.vue";
+import Tables from "../views/Tables.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -29,6 +30,7 @@ const routes = [
   { path: "/userplants", name: "UserPlants", component: UserPlants },
   { path: "/plants/:id", name: "plants-show", component: PlantsShow },
   { path: "/userplants/:id", name: "userplants-show", component: UserPlantsShow },
+  { path: "/tables", name: "tables", component: Tables },
 ];
 
 const router = new VueRouter({

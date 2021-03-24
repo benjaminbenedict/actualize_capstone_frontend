@@ -1,18 +1,31 @@
 <template>
   <div class="home">
-    <h1>All Plants</h1>
+    <header class="masthead d-flex">
+      <div class="container text-center my-auto">
+        <h1 class="mb-1">Welcome To Plant Track!</h1>
 
-    <h3>Search by name:</h3>
-    <input v-model="nameFilter" type="text" list="plant-names" />
-    <datalist id="plant-names">
-      <option v-for="plant in plants" v-bind:key="plant.id">{{ plant.common_name }}</option>
-    </datalist>
+        <div class="overlay">
+          <em>
+            <h3 class="mb-2">Try Searching by name:</h3>
+            <input v-model="nameFilter" type="text" list="plant-names" />
+            <datalist id="plant-names">
+              <option v-for="plant in plants" v-bind:key="plant.id">{{ plant.common_name }}</option>
+            </datalist>
+          </em>
+        </div>
+      </div>
+    </header>
 
     <section class="content-section" id="portfolio">
       <div class="container">
         <div class="content-section-heading text-center">
-          <h3 class="text-secondary mb-0"></h3>
-          <h2 class="mb-5">All Plants</h2>
+          <h3 class="text-secondary mb-0">All Plants</h3>
+          <h2 class="mb-5">Our Plant Database</h2>
+          <h3 class="text-secondary mb-0">Search</h3>
+          <input v-model="nameFilter" type="text" list="plant-names" />
+          <datalist id="plant-names">
+            <option v-for="plant in plants" v-bind:key="plant.id">{{ plant.common_name }}</option>
+          </datalist>
         </div>
         <div class="row no-gutters">
           <div v-for="plant in filterBy(plants, nameFilter, 'common_name')" v-bind:key="plant.id" class="col-lg-6">
@@ -41,7 +54,7 @@
       <div class="container text-center">
         <h2 class="mx-auto mb-5">Add a Plant You don't see</h2>
         <p class="lead mb-5">
-          Try searching the USDA
+          Don't Know the scientific name? Try searching the USDA
           <input type="text" v-model="usdaSearch" />
           <button class="btn btn-primary btn-xl" v-on:click="searchUSDA()">Search</button>
         </p>

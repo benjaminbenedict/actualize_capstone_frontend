@@ -1,15 +1,42 @@
 <template>
   <div class="plants-show">
-    <h2>{{ plant.common_name }}</h2>
+    <h2 class="text-secondary mb-3">{{ plant.common_name }}</h2>
     <img v-bind:src="plant.primary_image_url" v-bind:alt="plant.id" />
-    <p>Scientific Name: {{ plant.scientific_name }}</p>
-    <p>Plant Family: {{ plant.plant_family }}</p>
-    <p>Light: {{ plant.light }}</p>
-    <p>Temperature Range: {{ plant.temperature }} deegrees F</p>
-    <p>Humidity Level: {{ plant.humidity }}</p>
-    <p>Watering Frequency: {{ plant.water_freq }}</p>
-    <p>Soil Type: {{ plant.soil_type }}</p>
-    <p>description: {{ plant.description }}</p>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <h4 class="mb-2">Scientific Name:</h4>
+        <p class="mb-0">{{ plant.scientific_name }}</p>
+      </li>
+      <li class="list-group-item">
+        <h4 class="mb-2">Plant Family:</h4>
+        <p class="mb-0">{{ plant.plant_family }}</p>
+      </li>
+      <li class="list-group-item">
+        <h4 class="mb-2">Light:</h4>
+        <p class="mb-0">{{ plant.light }}</p>
+      </li>
+      <li class="list-group-item">
+        <h4 class="mb-2">Temperature Range:</h4>
+        <p class="mb-0">{{ plant.temperature }}</p>
+        deegrees F
+      </li>
+      <li class="list-group-item">
+        <h4 class="mb-2">Humidity Level:</h4>
+        <p class="mb-0">{{ plant.humidity }}</p>
+      </li>
+      <li class="list-group-item">
+        <h4 class="mb-2">Watering Frequency:</h4>
+        <p class="mb-0">{{ plant.water_freq }}</p>
+      </li>
+      <li class="list-group-item">
+        <h4 class="mb-2">Soil Type:</h4>
+        <p class="mb-0">{{ plant.soil_type }}</p>
+      </li>
+      <li class="list-group-item">
+        <h4 class="mb-2">Description:</h4>
+        <p class="mb-0">{{ plant.description }}</p>
+      </li>
+    </ul>
     <!-- <router-link v-if="plant.is_admin" v-bind:to="`/plants/${plant.id}/edit`">Edit plant</router-link>
     <button v-if="plant.is_admin" v-on:click="destroyplant(plant)">Destroy plant</button> -->
 
@@ -39,31 +66,52 @@
       </div>
     </div>
 
-    <section>
+    <section class="content-section   text-center">
       <div class="container text-center">
         <form v-on:submit.prevent="submit()">
-          <h2>Upload an image of this plant!</h2>
+          <h2 class="mb-5">Upload an image of this plant!</h2>
 
           <div>
-            Image:
-            <input type="file" v-on:change="setFile($event)" ref="fileInput" />
+            <p class="lead">Image:</p>
+            <input class="mb-3" type="file" v-on:change="setFile($event)" ref="fileInput" />
           </div>
-          <input type="submit" value="Submit" />
+          <input class="btn btn-primary" type="submit" value="Submit" />
         </form>
       </div>
     </section>
+    <!-- <section v-if="userImages" class="content-section   text-center" id="PlantPhotos">
+      <h2 class="mb-4">Your Photo's of this plant</h2>
+      <div>
+        <b-carousel
+          id="carousel-1"
+          v-model="slide"
+          :interval="4000"
+          controls
+          indicators
+          background="#ababab"
+          img-width="1024"
+          img-height="480"
+          style="text-shadow: 1px 1px 2px #333;"
+          @sliding-start="onSlideStart"
+          @sliding-end="onSlideEnd"
+        >
+          <b-carousel-slide v-for="image in userImages" :key="image.id" :img-src="image.img_url"></b-carousel-slide>
+        </b-carousel>
+      </div>
+    </section> -->
 
-    <section>
+    <section class="content-section   text-center">
       <div class="container text-center">
         <a class="btn btn-primary btn-xl" href="/">Back to all plants</a>
       </div>
     </section>
-    <router-link to="/">Back to all plants</router-link>
   </div>
 </template>
 
 <script>
+/* global $ */
 import axios from "axios";
+
 export default {
   data: function() {
     return {
@@ -71,6 +119,9 @@ export default {
       newPlantId: "",
       newDateAquired: Date(),
       image: "",
+      // userImages: [],
+      // slide: 0,
+      // sliding: null,
       status: "",
       errors: [],
     };
@@ -81,8 +132,22 @@ export default {
       this.plant = response.data;
       this.newPlantId = this.plant.id;
     });
+    // axios.get("/api/user_plants/" + this.$route.params.id).then(response => {
+    //   console.log("userplant show", response);
+
+    //   this.userImages = response.data.user_images;
+    // });
   },
   methods: {
+    // onSlideStart(slide) {
+    //   this.sliding = true;
+    //   console.log(slide);
+    // },
+
+    // onSlideEnd(slide) {
+    //   this.sliding = false;
+    //   console.log(slide);
+    // },
     createUserPlant: function() {
       var params = {
         plant_id: this.newPlantId,
@@ -93,7 +158,9 @@ export default {
         .post("/api/user_plants", params)
         .then(response => {
           console.log("user plants create", response);
-          this.$router.push("/user_plants");
+          $("#exampleModal").modal("hide");
+          $(".modal-backdrop").remove();
+          this.$router.push("/userplants");
         })
         .catch(error => {
           console.log("user_plants create error", error.response);
@@ -123,6 +190,7 @@ export default {
         .then(response => {
           this.$refs.fileInput.value = "";
           console.log("picture uploaded and create", response);
+          window.location.reload();
         })
         .catch(error => {
           console.log("pictures create error", error.response);
@@ -140,7 +208,7 @@ export default {
     //     .post("/api/user_plants", params)
     //     .then(response => {
     //       console.log("user plants create", response);
-    //       this.$router.push("/user_plants");
+    //       this.$router.push("/userplants");
     //     })
     //     .catch(error => {
     //       console.log("user_plants create error", error.response);

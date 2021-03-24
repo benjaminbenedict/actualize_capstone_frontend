@@ -11,6 +11,18 @@
         <li class="sidebar-nav-item">
           <a class="js-scroll-trigger" href="/">Home</a>
         </li>
+        <li v-if="isLoggedIn()" class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/userplants">Your Plants</a>
+        </li>
+        <li v-if="isLoggedIn()" class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/userplants#Dashboard">Your Dashboard</a>
+        </li>
+        <li v-if="isLoggedIn()" class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/#AddPlant">Add A Plant!</a>
+        </li>
+        <li v-if="isLoggedIn()" class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/userplants#TrackNew">Track a New Plant!</a>
+        </li>
         <li class="sidebar-nav-item">
           <a class="js-scroll-trigger" href="/signup">Signup</a>
         </li>
@@ -19,9 +31,6 @@
         </li>
         <li v-if="isLoggedIn()" class="sidebar-nav-item">
           <a class="js-scroll-trigger" href="/logout">Logout</a>
-        </li>
-        <li v-if="isLoggedIn()" class="sidebar-nav-item">
-          <a class="js-scroll-trigger" href="/userplants">Your Plants</a>
         </li>
       </ul>
     </nav>
@@ -46,7 +55,11 @@
   </div>
 </template>
 
-<style></style>
+<style>
+input {
+  border: 1px solid gray;
+}
+</style>
 <script>
 export default {
   data: function() {
