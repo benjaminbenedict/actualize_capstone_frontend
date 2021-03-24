@@ -2,7 +2,8 @@
   <div class="home">
     <header class="masthead d-flex">
       <div class="container text-center my-auto">
-        <h1 class="mb-1">Welcome To Plant Track!</h1>
+        <h1 class="mb-1">Welcome To</h1>
+        <h1 class="mb-1">Plant Track!</h1>
 
         <div class="overlay">
           <em>
