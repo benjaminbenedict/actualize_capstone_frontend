@@ -47,10 +47,10 @@
     <!-- <p>Last Watered: {{ user_plant.waterings }}</p> -->
     <!-- <p v-if="user_plant.user_images">Your Pics:</p>
       <img v-if="user_plant.user_images" v-bind:src="user_plant.user_images" v-bind:alt="user_plant.id" /> -->
-    <section class="content-section" id="TrackNew">
+    <section class="content-section">
       <div class="container">
         <div class="content-section-heading text-center">
-          <h2>Track a New plant</h2>
+          <h2 class="mb-5" id="TrackNew">Track a New plant</h2>
         </div>
         <select v-model="newPlantId">
           <option v-for="plant in plants" :value="plant.id" v-bind:key="plant.id">{{ plant.common_name }}</option>

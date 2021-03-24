@@ -36,10 +36,10 @@
         <a href="#" class="list-group-item list-group-item-action">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">Next Wattering Date</h5>
-            <small class="text-muted">3 days ago</small>
+            <!-- <small class="text-muted">3 days ago</small> -->
           </div>
           <p class="mb-1">{{ userplant.next_wattering }}</p>
-          <small class="text-muted">ya missed it fool!</small>
+          <small class="text-muted">Don't Forget!</small>
         </a>
         <!-- <a href="#" class="list-group-item list-group-item-action">
           <div class="d-flex w-100 justify-content-between">
@@ -157,6 +157,7 @@ export default {
         .then(response => {
           console.log("watering create", response);
           this.$router.push("#WateringDates");
+          window.location.reload();
         })
         .catch(error => {
           console.log("waterings create error", error.response);

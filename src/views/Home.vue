@@ -21,7 +21,7 @@
       <div class="container">
         <div class="content-section-heading text-center">
           <h3 class="text-secondary mb-0">All Plants</h3>
-          <h2 class="mb-5">Our Plant Database</h2>
+          <h2 id="plantData" class="mb-5">Our Plant Database</h2>
           <h3 class="text-secondary mb-0">Search</h3>
           <input v-model="nameFilter" type="text" list="plant-names" />
           <datalist id="plant-names">

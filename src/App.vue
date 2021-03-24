@@ -21,6 +21,9 @@
           <a class="js-scroll-trigger" href="/#AddPlant">Add A Plant!</a>
         </li>
         <li v-if="isLoggedIn()" class="sidebar-nav-item">
+          <a class="js-scroll-trigger" href="/#plantData">Our Plant Database</a>
+        </li>
+        <li v-if="isLoggedIn()" class="sidebar-nav-item">
           <a class="js-scroll-trigger" href="/userplants#TrackNew">Track a New Plant!</a>
         </li>
         <li class="sidebar-nav-item">
