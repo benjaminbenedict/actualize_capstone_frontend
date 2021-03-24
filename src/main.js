@@ -11,7 +11,7 @@ import Multiselect from "vue-multiselect";
 import { BSpinner } from "bootstrap-vue";
 
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-axios.defaults.baseURL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "/";
+axios.defaults.baseURL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://sleepy-crag-82036.herokuapp.com";
 
 var jwt = localStorage.getItem("jwt");
 if (jwt) {
